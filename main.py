@@ -6,7 +6,7 @@ import os
 import utime
 import _thread
 
-AP_NAME = "Shorty's Customs"
+AP_NAME = "pi pico"
 AP_DOMAIN = "pipico.net"
 AP_TEMPLATE_PATH = "ap_templates"
 APP_TEMPLATE_PATH = "app_templates"
