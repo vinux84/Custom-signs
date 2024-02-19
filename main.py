@@ -48,7 +48,7 @@ def setup_mode():
     server.add_route("/configure", handler = ap_configure, methods = ["POST"])
     server.set_callback(ap_catch_all)
 
-    ap = access_point("My Wifi")
+    ap = access_point(AP_NAME)
     ip = ap.ifconfig()[0]
     dns.run_catchall(ip)
 
