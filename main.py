@@ -7,7 +7,7 @@ import utime
 import _thread
 
 AP_NAME = "Shorty's Customs"
-AP_DOMAIN = "pipico.net"
+AP_DOMAIN = "shortyscustoms.net"
 AP_TEMPLATE_PATH = "ap_templates"
 APP_TEMPLATE_PATH = "app_templates"
 WIFI_FILE = "wifi.json"
