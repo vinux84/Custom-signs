@@ -1,8 +1,6 @@
 from phew import access_point, connect_to_wifi, is_connected_to_wifi, dns, server
 from phew.template import render_template
 import json
-import network
-import config
 import machine
 import os
 import utime
@@ -22,30 +20,12 @@ def machine_reset():
 
 def setup_mode():
     print("Entering setup mode...")
-
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    networks = wlan.scan()
-    
-    found_wifi_networks = {}
-    
-    for n in networks:
-        ssid = n[0].decode().strip('\x00')
-        if len(ssid) > 0:
-            rssi = n[3]
-            if ssid in found_wifi_networks:
-                if found_wifi_networks[ssid] < rssi:
-                    found_wifi_networks[ssid] = rssi
-            else:
-                found_wifi_networks[ssid] = rssi
-
-    wifi_networks_by_strength = sorted(found_wifi_networks.items(), key = lambda x:x[1], reverse = True)
     
     def ap_index(request):
         if request.headers.get("host").lower() != AP_DOMAIN.lower():
             return render_template(f"{AP_TEMPLATE_PATH}/redirect.html", domain = AP_DOMAIN.lower())
 
-        return render_template(f"{AP_TEMPLATE_PATH}/index.html", wifis = wifi_networks_by_strength)
+        return render_template(f"{AP_TEMPLATE_PATH}/index.html")
 
     def ap_configure(request):
         print("Saving wifi credentials...")
@@ -59,8 +39,8 @@ def setup_mode():
         return render_template(f"{AP_TEMPLATE_PATH}/configured.html", ssid = request.form["ssid"])
         
     def ap_catch_all(request):
-        if request.headers.get("host") != config.AP_DOMAIN:
-            return render_template(f"{AP_TEMPLATE_PATH}/redirect.html", domain = config.AP_DOMAIN)
+        if request.headers.get("host") != AP_DOMAIN:
+            return render_template(f"{AP_TEMPLATE_PATH}/redirect.html", domain = AP_DOMAIN)
 
         return "Not found.", 404
 
@@ -68,11 +48,9 @@ def setup_mode():
     server.add_route("/configure", handler = ap_configure, methods = ["POST"])
     server.set_callback(ap_catch_all)
 
-    ap = access_point(config.AP_NAME)
+    ap = access_point(AP_NAME)
     ip = ap.ifconfig()[0]
     dns.run_catchall(ip)
-
-    server.run()
 
 def application_mode():
     print("Entering application mode.")
@@ -148,3 +126,6 @@ except Exception:
     # Either no wifi configuration file found, or something went wrong, 
     # so go into setup mode.
     setup_mode()
+
+# Start the web server...
+server.run()
