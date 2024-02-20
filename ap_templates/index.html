@@ -7,55 +7,14 @@
     <body>
         <h1>Shorty's Custom Signs</h1>
         <p>You are now connected to your signs setup page.</p>
-        <p>Let&apos;s configure the sign to connect to your local wifi:</p>
-        <p>Choose your Wifi:</p>
-        <form class="pure-form pure-form-stacked" action="/configure" onsubmit="return validateForm(this);" method="POST" autocomplete="off" autocapitalize="none">
-            <fieldset>
-                <legend>WiFi</legend>
-                <p>You&apos;ll need your network name or SSID and password.</p>
-                <p><b>These are case sensitive, so be sure to enter them correctly.</b></p>
-                <label for="ssid">SSID:</label>
-                <select id="ssidselect" onchange="ssidChanged()">
-                    {{"" if len(wifis) == 0 else "".join(["""<option value="{0}">{0}</option>""".format(w[0]) for w in wifis])}}                        
-                    <option value="other">Other...</option>
-                </select>
-                <input type="text" id="ssid" name="ssid" placeholder="WiFi SSID" value="{{"" if len(wifis) == 0 else wifis[0][0]}}" hidden required>
-                <span class="pure-form-message">This is a required field.</span>
-                <label for="password">Password:</label>
-                <input type="text" id="password" name="password" placeholder="WiFi Password" required>
-                <span class="pure-form-message">This is a required field.</span>
-            </fieldset>
+        <p>Let&apos;s configure the sign to connect to your local wifi.</p>
+        <p>It can only connect to a 2.4 GHz signal.</p>
+        <form action="/configure" method="POST" autocomplete="off" autocapitalize="none">
+            <label for="ssid">Network Name:</label><br>
+            <input type="text" id="ssid" name="ssid"><br>
+            <label for="password">Password:</label><br>
+            <input type="text" id="password" name="password"><br><br>
+            <button>Save</button>
         </form>
-        <script>
-            function ssidChanged() {
-                const selectedSSID = document.getElementById('ssidselect').value;
-                const ssidElem = document.getElementById('ssid');
-                if (selectedSSID === 'other') {
-                    ssidElem.value = '';
-                    ssidElem.hidden = false;
-                } else {
-                    ssidElem.hidden = true;                    
-                    ssidElem.value = selectedSSID;
-                }
-            }
-                        
-            function validateForm(form) {
-                // The ssid field must contain something.
-                if (form.ssid.value.trim() === '') {
-                    form.ssid.focus();
-                    return false;
-                }
-                
-                // The password field must contain something.
-                if (form.password.value.trim() === '') {
-                    form.password.focus();
-                    return false;
-                }
-                
-                // Form has validated OK.
-                return true;
-            }
-        </script>
-        
     </body>
 </html>
