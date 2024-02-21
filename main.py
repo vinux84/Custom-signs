@@ -13,8 +13,6 @@ APP_TEMPLATE_PATH = "app_templates"
 WIFI_FILE = "wifi.json"
 WIFI_MAX_ATTEMPTS = 3
 
-
-
 def machine_reset():
     utime.sleep(1)
     print("Resetting...")
@@ -53,18 +51,6 @@ def setup_mode():
     ap = access_point(AP_NAME)
     ip = ap.ifconfig()[0]
     dns.run_catchall(ip)
-
-def send_ip_address(ip_address):
-    print(f"Sending assigned IP Address {ip_address} to user")
-
-    def ap_send_ip(request):
-        if request.headers.get("host").lower() != AP_DOMAIN.lower():
-            return render_template(f"{AP_TEMPLATE_PATH}/redirect.html", domain = AP_DOMAIN.lower())
-
-        return render_template(f"{AP_TEMPLATE_PATH}/send_ip.html", ip_add = ip_address)
-
-    server.add_route("/send_ip", handler = ap_send_ip, methods = ["POST"])
-    
 
 def application_mode():
     print("Entering application mode.")
@@ -126,8 +112,6 @@ try:
                 wifi_current_attempt += 1
                 
         if is_connected_to_wifi():
-            send_ip_address(ip_address)
-
             application_mode()
         else:
             
