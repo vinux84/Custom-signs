@@ -43,8 +43,10 @@ def connect_to_wifi(ssid, password, timeout_seconds=30):
   }
 
   wlan = network.WLAN(network.STA_IF)
+  network.hostname(Shortys)
   wlan.active(True)    
   wlan.connect(ssid, password)
+  
   start = time.ticks_ms()
   status = wlan.status()
 
