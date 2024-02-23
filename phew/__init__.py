@@ -71,13 +71,11 @@ def connect_to_wifi(ssid, password, timeout_seconds=30):
       host=lambda: "shortys"
     )
 
-  def announce_service():
-    responder.advertise("_http", "_tcp", port=80)
+  
     
-  announce_service()
-  loop.run_forever()
+  
 
-  return wlan.ifconfig()[0]
+    return wlan.ifconfig()[0]
   return None
 
 
