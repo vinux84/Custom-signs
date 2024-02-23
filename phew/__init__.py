@@ -32,9 +32,7 @@ def is_connected_to_wifi():
 # helper method to quickly get connected to wifi
 def connect_to_wifi(ssid, password, timeout_seconds=30):
   import network, time
-  import uasyncio
-  from mdns_client import Client
-  from mdns_client.responder import Responder
+  
 
   statuses = {
     network.STAT_IDLE: "idle",
