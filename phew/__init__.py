@@ -51,7 +51,6 @@ def connect_to_wifi(ssid, password, timeout_seconds=30):
 
   logging.debug(f"  - {statuses[status]}")
   while not wlan.isconnected() and (time.ticks_ms() - start) < (timeout_seconds * 1000):
-    print("here")
     new_status = wlan.status()
     if status != new_status:
       logging.debug(f"  - {statuses[status]}")
