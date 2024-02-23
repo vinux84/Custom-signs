@@ -61,20 +61,6 @@ def connect_to_wifi(ssid, password, timeout_seconds=30):
     time.sleep(0.25)
   
   if wlan.status() == network.STAT_GOT_IP:
-    own_ip_address = wlan.ifconfig()[0]
-    loop = uasyncio.get_event_loop()
-    client = Client(own_ip_address)
-
-    responder = Responder(
-      client,
-      own_ip=lambda: own_ip_address,
-      host=lambda: "shortys"
-    )
-
-  
-    
-  
-
     return wlan.ifconfig()[0]
   return None
 
