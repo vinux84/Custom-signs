@@ -32,6 +32,9 @@ def is_connected_to_wifi():
 # helper method to quickly get connected to wifi
 def connect_to_wifi(ssid, password, timeout_seconds=30):
   import network, time
+  import uasyncio
+  from mdns_client import Client
+  from mdns_client.responder import Responder
 
   statuses = {
     network.STAT_IDLE: "idle",
@@ -44,7 +47,6 @@ def connect_to_wifi(ssid, password, timeout_seconds=30):
 
   wlan = network.WLAN(network.STA_IF)
   wlan.active(True)
-  network.hostname("shortys")   
   wlan.connect(ssid, password)  
   start = time.ticks_ms()
   status = wlan.status()
@@ -58,7 +60,23 @@ def connect_to_wifi(ssid, password, timeout_seconds=30):
     time.sleep(0.25)
 
   if wlan.status() == network.STAT_GOT_IP:
-    return wlan.ifconfig()[0]
+    own_ip_address = wlan.ifconfig()[0]
+    loop = uasyncio.get_event_loop()
+    client = Client(own_ip_address)
+
+    responder = Responder(
+      client,
+      own_ip=lambda: own_ip_address,
+      host=lambda: "shortys"
+    )
+
+  def announce_service():
+    responder.advertise("_http", "_tcp", port=80)
+    
+  announce_service()
+  loop.run_forever()
+
+  return wlan.ifconfig()[0]
   return None
 
 
